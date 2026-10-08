@@ -12,13 +12,19 @@ public class DBConnection {
     private static final String USER = "root";
 
     private static final String PASSWORD =
-            "YOUR_MYSQL_PASSWORD";
+            System.getenv("DB_PASSWORD");
 
     private DBConnection() {
     }
 
     public static Connection getConnection()
             throws SQLException {
+
+        if (PASSWORD == null || PASSWORD.isBlank()) {
+            throw new SQLException(
+                    "DB_PASSWORD environment variable is not set."
+            );
+        }
 
         return DriverManager.getConnection(
                 URL,
